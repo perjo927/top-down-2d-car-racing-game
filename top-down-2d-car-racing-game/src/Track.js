@@ -1,0 +1,55 @@
+
+import { Graphics } from 'pixi.js';
+
+export class Track {
+    constructor(app) {
+        this.app = app;
+        this.graphics = new Graphics();
+
+        // Define track properties
+        this.trackWidth = 100;
+        const trackColor = 0x333333; // Dark grey for the track
+        const grassColor = 0x009900; // Green for the grass
+
+        // Get screen dimensions
+        const screenWidth = this.app.screen.width;
+        const screenHeight = this.app.screen.height;
+
+        // Center of the ellipses
+        this.centerX = screenWidth / 2;
+        this.centerY = screenHeight / 2;
+
+        // Radii of the outer ellipse
+        this.outerRadiusX = screenWidth / 2 - 50;
+        this.outerRadiusY = screenHeight / 2 - 50;
+
+        // Radii of the inner ellipse
+        this.innerRadiusX = this.outerRadiusX - this.trackWidth;
+        this.innerRadiusY = this.outerRadiusY - this.trackWidth;
+
+        // Draw the outer grass area
+        this.graphics.rect(0, 0, screenWidth, screenHeight);
+        this.graphics.fill(grassColor);
+
+        // Draw the outer ellipse of the track
+        this.graphics.ellipse(this.centerX, this.centerY, this.outerRadiusX, this.outerRadiusY);
+        this.graphics.fill(trackColor);
+
+        // Draw the inner ellipse (grass area)
+        this.graphics.ellipse(this.centerX, this.centerY, this.innerRadiusX, this.innerRadiusY);
+        this.graphics.fill(grassColor);
+    }
+
+    isOffTrack(x, y) {
+        const dx = x - this.centerX;
+        const dy = y - this.centerY;
+
+        // Check if the point is outside the outer ellipse
+        const isOutsideOuter = (dx * dx) / (this.outerRadiusX * this.outerRadiusX) + (dy * dy) / (this.outerRadiusY * this.outerRadiusY) > 1;
+
+        // Check if the point is inside the inner ellipse
+        const isInsideInner = (dx * dx) / (this.innerRadiusX * this.innerRadiusX) + (dy * dy) / (this.innerRadiusY * this.innerRadiusY) < 1;
+
+        return isOutsideOuter || isInsideInner;
+    }
+}
