@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "npm run dev",
-    "build": "npm run lint && vite build",
+    "build": "npm run lint && npm run test && vite build",
     "lint": "eslint .",
+    "test": "vitest",
     "dev": "vite"
   },
   "dependencies": {
